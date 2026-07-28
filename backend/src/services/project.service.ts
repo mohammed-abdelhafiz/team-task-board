@@ -2,12 +2,13 @@ import { Types } from "mongoose";
 
 import Project from "@/models/project.model";
 import {
+  AddMemberDto,
   CreateProjectDto,
   UpdateProjectDto,
 } from "@/validators/project.validator";
 import { AppError } from "@/utils/app-error";
 import { authorizeProjectManagement } from "@/utils/project-permission";
-import { IUser } from "@/models/user.model";
+import User, { IUser } from "@/models/user.model";
 
 export async function createProject(
   userId: Types.ObjectId,
@@ -79,4 +80,94 @@ export async function deleteProject(projectId: string, user: IUser) {
   authorizeProjectManagement(project, user);
 
   await project.deleteOne();
+}
+
+export async function addMember(
+  projectId: string,
+  currentUserId: Types.ObjectId,
+  data: AddMemberDto,
+) {
+  const project = await Project.findById(projectId);
+
+  if (!project) {
+    throw new AppError("Project not found", 404);
+  }
+
+  const currentUser = await User.findById(currentUserId);
+
+  if (!currentUser) {
+    throw new AppError("User not found", 404);
+  }
+
+  authorizeProjectManagement(project, currentUser);
+
+  const user = await User.findById(data.userId);
+
+  if (!user) {
+    throw new AppError("User not found", 404);
+  }
+
+  const alreadyMember = project.members.some((member) =>
+    member.equals(user._id),
+  );
+
+  if (alreadyMember) {
+    throw new AppError("User is already a member", 400);
+  }
+
+  project.members.push(user._id);
+
+  await project.save();
+
+  await project.populate("members", "name email");
+
+  return project;
+}
+
+export async function removeMember(
+  projectId: string,
+  currentUserId: Types.ObjectId,
+  memberId: string,
+) {
+  const project = await Project.findById(projectId);
+
+  if (!project) {
+    throw new AppError("Project not found", 404);
+  }
+
+  const currentUser = await User.findById(currentUserId);
+
+  if (!currentUser) {
+    throw new AppError("User not found", 404);
+  }
+
+  authorizeProjectManagement(project, currentUser);
+
+  if (!Types.ObjectId.isValid(memberId)) {
+    throw new AppError("Invalid user id", 400);
+  }
+
+  if (project.owner.equals(memberId)) {
+    throw new AppError("Project owner cannot be removed", 400);
+  }
+
+  const memberObjectId = new Types.ObjectId(memberId);
+
+  const isMember = project.members.some((member) =>
+    member.equals(memberObjectId),
+  );
+
+  if (!isMember) {
+    throw new AppError("User is not a member", 404);
+  }
+
+  project.members = project.members.filter(
+    (member) => !member.equals(memberObjectId),
+  );
+
+  await project.save();
+
+  await project.populate("members", "name email");
+
+  return project;
 }

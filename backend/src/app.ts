@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import { errorHandler } from "./middlewares/errorHandler.middleware";
 import authRoutes from "@/routes/auth.routes";
 import projectRoutes from "@/routes/project.routes";
+import taskRoutes from "@/routes/task.routes";
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.get("/", (_, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
+app.use("/api/projects/:projectId/tasks", taskRoutes);
 
 // Error Handling Middleware
 app.use(errorHandler);

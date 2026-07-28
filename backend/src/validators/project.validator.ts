@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { z } from "zod";
 
 export const createProjectSchema = z.object({
@@ -13,6 +14,14 @@ export const createProjectSchema = z.object({
     .max(1000, "Description must not exceed 1000 characters")
     .optional(),
 });
+
+export const AddMemberSchema = z.object({
+  userId: z.string().refine(Types.ObjectId.isValid, {
+    message: "Invalid user id",
+  }),
+});
+
+export type AddMemberDto = z.infer<typeof AddMemberSchema>;
 
 export type CreateProjectDto = z.infer<typeof createProjectSchema>;
 

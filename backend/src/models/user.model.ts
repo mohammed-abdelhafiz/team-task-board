@@ -2,7 +2,7 @@ import { UserRole } from "@/constants/enums";
 import bcrypt from "bcryptjs";
 import mongoose, { Document } from "mongoose";
 
-interface IUser extends Document {
+export interface IUser extends Document {
   fullName: string;
   email: string;
   password: string;

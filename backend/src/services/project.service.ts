@@ -24,12 +24,30 @@ export async function createProject(
   return project;
 }
 
-export async function getProjects(userId: Types.ObjectId) {
-  return Project.find({
-    members: userId,
-  })
+export async function getProjects(
+  userId: Types.ObjectId,
+  page: number = 1,
+  limit: number = 10,
+) {
+  const skip = (page - 1) * limit;
+  const total = await Project.countDocuments({ members: userId });
+  const projects = await Project.find({ members: userId })
     .populate("owner", "fullName email")
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  const totalPages = Math.ceil(total / limit);
+  const nextPage = page < totalPages ? page + 1 : undefined;
+
+  return {
+    projects,
+    total,
+    page,
+    limit,
+    totalPages,
+    nextPage,
+  };
 }
 
 export async function getProjectById(

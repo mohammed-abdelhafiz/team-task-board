@@ -17,7 +17,7 @@ export const createTaskSchema = z.object({
   priority: z.enum(TaskPriority).optional(),
   assignedTo: z.string().optional(),
 
-  dueDate: z.iso.datetime().optional(),
+  dueDate: z.coerce.date().optional(),
 });
 
 export const updateTaskSchema = createTaskSchema
@@ -30,6 +30,8 @@ export const taskQuerySchema = z.object({
   status: z.enum(TaskStatus).optional(),
   priority: z.enum(TaskPriority).optional(),
   assignedTo: z.string().optional(),
+  search: z.string().trim().max(100).optional(),
+  sort: z.enum(["createdAt", "dueDate"]).default("createdAt"),
 
   page: z.coerce.number().min(1).default(1),
 

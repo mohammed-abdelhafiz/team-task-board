@@ -16,10 +16,9 @@ export const createProjectSchema = z.object({
 });
 
 export const AddMemberSchema = z.object({
-  userId: z.string().refine(Types.ObjectId.isValid, {
-    message: "Invalid user id",
-  }),
-});
+  userId: z.string().refine(Types.ObjectId.isValid, { message: "Invalid user id" }).optional(),
+  email: z.email("Invalid email address").optional(),
+}).refine((data) => data.userId || data.email, { message: "Provide a user id or email address" });
 
 export type AddMemberDto = z.infer<typeof AddMemberSchema>;
 

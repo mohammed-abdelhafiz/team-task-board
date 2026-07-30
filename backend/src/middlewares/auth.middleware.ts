@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken";
 import User from "@/models/user.model";
 import { AppError } from "@/utils/app-error";
 import { verifyToken } from "@/utils/jwt-token";
@@ -9,7 +8,8 @@ export async function protect(
   _res: Response,
   next: NextFunction,
 ) {
-  const token = req.cookies.token;
+  const bearerToken = req.headers.authorization?.replace(/^Bearer\s+/i, "");
+  const token = req.cookies.token || bearerToken;
 
   if (!token) {
     throw new AppError("Unauthorized", 401);

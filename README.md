@@ -1,101 +1,185 @@
-# Team Task Board
+# 🚀 Team Task Board
 
-A production-minded full-stack task board monorepo for teams. Authenticated users can manage projects, collaborate with project members, and create and track tasks through To Do, In Progress, and Done.
+A production-ready, full-stack collaborative task management monorepo. Authenticated users can create and manage projects, collaborate with team members, and track tasks through interactive Kanban boards (To Do, In Progress, Done) with real-time updates via Socket.IO.
 
-## Stack and Architecture
+🔗 **Live Demo:** [https://team-task-board.fly.dev/](https://team-task-board.fly.dev/)  
+📄 **API Specification:** [openapi.yaml](openapi.yaml)
 
-- **Monorepo:** npm workspaces (`frontend`, `backend`).
-- **Frontend:** React, TypeScript, Vite, TanStack Query, Zustand, Tailwind CSS.
-- **Backend:** Express 5, TypeScript, MongoDB/Mongoose, Socket.IO, Zod validation.
-- **Single-Domain Deployment:** The Express backend serves static React production assets (`frontend/dist`) and handles SPA fallback routing under the same origin.
-- **Authentication:** HTTP-only JWT cookie, bcrypt password hashing, route middleware.
+---
 
-## Quick Start (Monorepo)
+## 🔑 Demo Accounts
 
-Prerequisites: Node.js 20+ and a running MongoDB instance.
+The database includes pre-configured demo accounts for evaluating role-based permissions:
+
+| Role | Email | Password | Access Level |
+| --- | --- | --- | --- |
+| **Admin** | `admin@example.com` | `Admin123!` | Full administrative access, project creation, member management, and task operations |
+| **Member** | `member@example.com` | `Member123!` | Standard project collaboration, task creation, status updates, and history tracking |
+
+To re-seed or reset these accounts in your database:
+```bash
+npm run seed --workspace=backend
+```
+
+---
+
+## 🏗️ Architecture Overview
+
+The project is structured as a **single-domain unified monorepo** using **npm workspaces**:
+
+```
+team-task-board/
+├── backend/                  # Node.js + Express 5 + TypeScript Backend
+│   ├── src/
+│   │   ├── config/           # DB connection & Socket.IO server configuration
+│   │   ├── constants/        # System enums (Roles, Task Status, Priorities)
+│   │   ├── controllers/      # Route handler logic (Auth, Projects, Tasks)
+│   │   ├── middlewares/      # JWT Authentication, Error Handler, Zod validation
+│   │   ├── models/           # Mongoose Data Models (User, Project, Task, AuditLog)
+│   │   ├── routes/           # Express router endpoints
+│   │   ├── services/         # Business logic layer
+│   │   ├── validators/       # Zod schemas for request payload validation
+│   │   └── server.ts         # Server entry point with Socket.IO & static frontend host
+│   └── tests/                # Automated test suites
+├── frontend/                 # React 19 + TypeScript + Vite Frontend
+│   ├── src/
+│   │   ├── api/              # Axios HTTP client & API service modules
+│   │   ├── components/       # UI components (Kanban Board, Task Cards, Dialogs, Sidebar)
+│   │   ├── pages/            # View components (Dashboard, Project Detail, Auth)
+│   │   ├── store/            # Zustand state management
+│   │   └── types/            # Shared TypeScript type definitions
+│   └── dist/                 # Compiled static frontend assets
+├── openapi.yaml              # OpenAPI 3.0 API Documentation
+├── Dockerfile                # Multi-stage production container build definition
+├── docker-compose.yml        # Multi-container orchestration (App + MongoDB)
+└── package.json              # Monorepo root workspace config & scripts
+```
+
+### Data & Authentication Flow
+1. **Single-Domain Hosting:** In production, the Express backend serves compiled React assets directly from `frontend/dist` and handles SPA routing fallbacks.
+2. **Authentication:** Uses secure `HTTP-Only` JWT cookies (or optional `Authorization: Bearer <token>` headers) with bcrypt password hashing and middleware authorization.
+3. **Real-time Synchronization:** Integrated Socket.IO server broadcasts project updates and task status changes instantly across active team sessions.
+
+---
+
+## 🗄️ Database Setup
+
+The backend connects to MongoDB using Mongoose.
+
+### Option A: Local MongoDB
+Ensure a MongoDB instance is running locally on port `27017`:
+```env
+MONGO_URI=mongodb://127.0.0.1:27017/team-task-board
+```
+
+### Option B: MongoDB Atlas (Cloud)
+1. Create a cluster on [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
+2. Allow network access (`0.0.0.0/0` for cloud deployment).
+3. Create a database user and copy your connection string:
+```env
+MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/team-task-board?retryWrites=true&w=majority
+```
+
+---
+
+## 🚀 Quick Start & Installation
+
+### Prerequisites
+- **Node.js**: v20 or v22+
+- **MongoDB**: Local or Atlas Connection String
 
 ### Development Mode
 
-1. Copy `.env.example` to `.env` (or configure `backend/.env`):
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/mohammed-abdelhafiz/team-task-board.git
+   cd team-task-board
+   ```
+
+2. **Setup environment variables:**
    ```bash
    cp .env.example .env
    ```
-2. Install monorepo dependencies:
+
+3. **Install all dependencies:**
    ```bash
    npm install
    ```
-3. Seed demo data (optional):
+
+4. **Seed initial demo data:**
    ```bash
    npm run seed --workspace=backend
    ```
-4. Start both frontend and backend concurrently in development mode:
+
+5. **Start development servers (Frontend + Backend concurrently):**
    ```bash
    npm run dev
    ```
+   - Frontend: `http://localhost:5173`
+   - Backend API: `http://localhost:5000`
 
-### Production Single-Domain Build & Run
+---
 
-Build both the React frontend and Express backend, then start the unified server:
+## 🧪 Testing
+
+The repository includes automated test suites covering authentication, payload validation, and role-based permissions:
 
 ```bash
-# Build frontend and backend
-npm run build
-
-# Start the unified server on port 5000 serving both API and Frontend
-npm start
+# Run backend test suite
+npm test
 ```
-Open `http://localhost:5000` in your browser. Both the React UI and API routes (`/api/*`) are served from the same domain.
 
-### Single-Container Docker Deployment
+Tests verify:
+- User registration and login flow
+- Task CRUD operations and state transitions
+- Role-based authorization rules (Admin vs Member privileges)
 
-Start MongoDB and the single-domain monorepo application container:
+---
+
+## 🐳 Docker Deployment
+
+To build and run the entire stack locally using Docker Compose:
 
 ```bash
 docker compose up --build
 ```
 Access the application at `http://localhost:5000`.
 
-## Demo Accounts
+---
 
-Run `npm run seed --workspace=backend` to create or refresh:
+## 📑 API Reference Summary
 
-| Role | Email | Password |
+The complete OpenAPI specification is provided in [openapi.yaml](openapi.yaml).
+
+| Method | Endpoint | Description | Auth Required |
+| --- | --- | --- | --- |
+| `GET` | `/api/health` | Service health status check | No |
+| `POST` | `/api/auth/register` | Register a new user account | No |
+| `POST` | `/api/auth/login` | Authenticate and retrieve session cookie | No |
+| `POST` | `/api/auth/logout` | Clear user session cookie | Yes |
+| `GET` | `/api/auth/me` | Retrieve authenticated user profile | Yes |
+| `GET` | `/api/projects` | List projects accessible to user | Yes |
+| `POST` | `/api/projects` | Create a new project | Yes |
+| `GET` | `/api/projects/:id` | Get project details & member list | Yes |
+| `PATCH` | `/api/projects/:id` | Update project details (Owner/Admin) | Yes |
+| `DELETE` | `/api/projects/:id` | Delete project and tasks (Owner/Admin) | Yes |
+| `POST` | `/api/projects/:id/members` | Add project member | Yes |
+| `DELETE` | `/api/projects/:id/members/:userId` | Remove project member | Yes |
+| `GET` | `/api/projects/:id/tasks` | Filter & list project tasks | Yes |
+| `POST` | `/api/projects/:id/tasks` | Create a task within project | Yes |
+| `PATCH` | `/api/projects/:id/tasks/:taskId` | Update task status, assignee, or details | Yes |
+| `DELETE` | `/api/projects/:id/tasks/:taskId` | Delete a task | Yes |
+
+---
+
+## 🛠️ Monorepo Scripts Reference
+
+| Command | Workspace | Description |
 | --- | --- | --- |
-| Admin | admin@example.com | Admin123! |
-| Member | member@example.com | Member123! |
-
-## Monorepo Commands
-
-| Location | Command | Purpose |
-| --- | --- | --- |
-| Root | `npm run build` | Build both React frontend and Express backend |
-| Root | `npm start` | Start production server serving API + Frontend |
-| Root | `npm run dev` | Run frontend & backend in parallel for development |
-| Root | `npm test` | Run backend validation & permission test suite |
-| backend | `npm run seed` | Seed database with demo accounts & project data |
-| backend | `npm run check` | Type-check backend TypeScript |
-| frontend | `npm run lint` | Run ESLint checks on frontend |
-
-## API Overview
-
-The complete machine-readable API description is in [openapi.yaml](openapi.yaml).
-
-All project and task routes require authentication. Send the session cookie (browser) or an `Authorization: Bearer <token>` header.
-
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| GET | `/api/health` | API health check |
-| POST | `/api/auth/register` | Create a member account |
-| POST | `/api/auth/login` | Start a session |
-| POST | `/api/auth/logout` | End a session |
-| GET | `/api/auth/me` | Current user |
-| GET/POST | `/api/projects` | List accessible projects / create a project |
-| GET/PATCH/DELETE | `/api/projects/:projectId` | Read, update, or delete a project |
-| POST | `/api/projects/:projectId/members` | Add a member (owner/Admin) |
-| DELETE | `/api/projects/:projectId/members/:userId` | Remove a member (owner/Admin) |
-| GET/POST | `/api/projects/:projectId/tasks` | Filter/list tasks or create one |
-| GET/PATCH/DELETE | `/api/projects/:projectId/tasks/:taskId` | Read, update, or delete a task |
-
-## Environment Variables
-
-`.env.example` documents all required configuration including optional `FRONTEND_DIST_PATH` overrides.
+| `npm run dev` | Root | Run frontend & backend in parallel for development |
+| `npm run build` | Root | Compile React frontend and TypeScript backend |
+| `npm start` | Root | Run production server serving unified application |
+| `npm test` | Root | Execute backend automated test suite |
+| `npm run seed` | Backend | Seed database with demo accounts & sample data |
+| `npm run check` | Backend | Run TypeScript type checks on backend |
+| `npm run lint` | Frontend | Run ESLint checks on frontend |

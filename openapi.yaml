@@ -1,0 +1,67 @@
+openapi: 3.0.3
+info:
+  title: Team Task Board API
+  version: 1.0.0
+  description: Cookie or Bearer-token authenticated project and task board API.
+servers:
+  - url: http://localhost:5000/api
+paths:
+  /auth/register:
+    post:
+      summary: Register a member
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Register' }
+      responses: { '201': { description: Registered } }
+  /auth/login:
+    post:
+      summary: Log in and set an HTTP-only cookie
+      responses: { '200': { description: Logged in } }
+  /projects:
+    get: { summary: List projects accessible to the current user, responses: { '200': { description: Project list } } }
+    post:
+      summary: Create a project
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ProjectInput' } } } }
+      responses: { '201': { description: Created } }
+  /projects/{projectId}:
+    parameters: [{ name: projectId, in: path, required: true, schema: { type: string } }]
+    get: { summary: Get a project and its members, responses: { '200': { description: Project } } }
+    patch: { summary: Update a project (owner/Admin), responses: { '200': { description: Updated } } }
+    delete: { summary: Delete a project and its tasks (owner/Admin), responses: { '204': { description: Deleted } } }
+  /projects/{projectId}/members:
+    post:
+      summary: Add a member by user ID or email (owner/Admin)
+      responses: { '200': { description: Member added } }
+  /projects/{projectId}/tasks:
+    get:
+      summary: List project tasks
+      parameters:
+        - { name: status, in: query, schema: { type: string, enum: [todo, in_progress, done] } }
+        - { name: priority, in: query, schema: { type: string, enum: [low, medium, high] } }
+        - { name: assignedTo, in: query, schema: { type: string } }
+        - { name: search, in: query, schema: { type: string } }
+        - { name: sort, in: query, schema: { type: string, enum: [createdAt, dueDate] } }
+      responses: { '200': { description: Tasks } }
+    post:
+      summary: Create a task
+      responses: { '201': { description: Created } }
+  /projects/{projectId}/tasks/{taskId}:
+    patch: { summary: Update a task, responses: { '200': { description: Updated } } }
+    delete: { summary: Delete a task, responses: { '200': { description: Deleted } } }
+components:
+  schemas:
+    Register:
+      type: object
+      required: [fullName, email, password]
+      properties:
+        fullName: { type: string }
+        email: { type: string, format: email }
+        password: { type: string, minLength: 6 }
+    ProjectInput:
+      type: object
+      required: [title]
+      properties:
+        title: { type: string }
+        description: { type: string }

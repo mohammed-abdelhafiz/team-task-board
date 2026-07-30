@@ -180,18 +180,18 @@ export const TaskCard: React.FC<TaskCardProps> = ({
         </div>
 
         {/* Task Title & Description */}
-        <h3 className="mt-3 font-semibold text-foreground tracking-tight line-clamp-2">
+        <h3 className="mt-3 font-semibold text-foreground tracking-tight line-clamp-2 break-words">
           {task.title}
         </h3>
         {task.description && (
-          <p className="mt-1.5 text-xs text-muted-foreground/90 line-clamp-2 leading-relaxed">
+          <p className="mt-1.5 text-xs text-muted-foreground/90 line-clamp-2 leading-relaxed break-words">
             {task.description}
           </p>
         )}
       </div>
 
       {/* Card Footer: Due Date & Assignee */}
-      <div className="mt-4 flex items-center justify-between border-t border-border/40 pt-3 text-xs text-muted-foreground">
+      <div className="mt-4 flex items-center justify-between gap-2 border-t border-border/40 pt-3 text-xs text-muted-foreground min-w-0">
         {formattedDate ? (
           <div
             className={cn(

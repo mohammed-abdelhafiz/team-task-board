@@ -4,10 +4,10 @@ import { MobileSidebar } from "./MobileSidebar";
 export const Sidebar = () => {
   return (
     <>
-      <div className="hidden md:block">
+      <div className="hidden lg:block">
         <DesktopSidebar />
       </div>
-      <div className="md:hidden">
+      <div className="lg:hidden">
         <MobileSidebar />
       </div>
     </>

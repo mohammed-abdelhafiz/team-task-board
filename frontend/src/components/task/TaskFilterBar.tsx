@@ -39,9 +39,9 @@ export const TaskFilterBar: React.FC<TaskFilterBarProps> = ({
   return (
     <div className="flex flex-col gap-3 rounded-2xl border border-border/60 bg-card p-3.5 shadow-xs sm:flex-row sm:items-center sm:justify-between">
       {/* Search Input & Dropdowns */}
-      <div className="flex flex-1 flex-wrap items-center gap-2.5">
+      <div className="flex flex-1 flex-wrap items-center gap-2.5 w-full">
         {/* Search */}
-        <div className="relative min-w-[200px] flex-1 sm:max-w-xs">
+        <div className="relative w-full md:w-auto md:min-w-[200px] flex-1 sm:max-w-xs min-w-0">
           <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Search tasks..."
@@ -56,7 +56,7 @@ export const TaskFilterBar: React.FC<TaskFilterBarProps> = ({
           aria-label="Filter by priority"
           value={priority}
           onChange={(e) => onPriorityChange(e.target.value as TaskPriority | "")}
-          className="h-9 rounded-md border border-input bg-background px-3 text-xs text-foreground shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
+          className="h-9 w-full sm:w-auto flex-1 sm:flex-none min-w-0 rounded-md border border-input bg-background px-2.5 text-xs text-foreground shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
         >
           <option value="">All Priorities</option>
           <option value="high">🔥 High</option>
@@ -69,7 +69,7 @@ export const TaskFilterBar: React.FC<TaskFilterBarProps> = ({
           aria-label="Filter by status"
           value={status}
           onChange={(e) => onStatusChange(e.target.value as TaskStatus | "")}
-          className="h-9 rounded-md border border-input bg-background px-3 text-xs text-foreground shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
+          className="h-9 w-full sm:w-auto flex-1 sm:flex-none min-w-0 rounded-md border border-input bg-background px-2.5 text-xs text-foreground shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
         >
           <option value="">All Statuses</option>
           <option value="todo">To Do</option>
@@ -82,7 +82,7 @@ export const TaskFilterBar: React.FC<TaskFilterBarProps> = ({
           aria-label="Filter by assignee"
           value={assignedTo}
           onChange={(e) => onAssigneeChange(e.target.value)}
-          className="h-9 rounded-md border border-input bg-background px-3 text-xs text-foreground shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
+          className="h-9 w-full sm:w-auto flex-1 sm:flex-none min-w-0 rounded-md border border-input bg-background px-2.5 text-xs text-foreground shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
         >
           <option value="">All Assignees</option>
           {members.map((member) => (
@@ -98,7 +98,7 @@ export const TaskFilterBar: React.FC<TaskFilterBarProps> = ({
             variant="ghost"
             size="sm"
             onClick={onResetFilters}
-            className="h-9 gap-1.5 px-2.5 text-xs text-muted-foreground hover:text-foreground"
+            className="h-9 gap-1.5 px-2.5 text-xs text-muted-foreground hover:text-foreground shrink-0"
           >
             <RotateCcw className="size-3.5" />
             Reset
@@ -107,7 +107,7 @@ export const TaskFilterBar: React.FC<TaskFilterBarProps> = ({
       </div>
 
       {/* View Toggle (Board vs List) */}
-      <div className="flex items-center gap-1 rounded-lg border border-border/60 bg-muted/40 p-1 self-end sm:self-auto">
+      <div className="flex items-center gap-1 rounded-lg border border-border/60 bg-muted/40 p-1 self-start sm:self-auto shrink-0">
         <Button
           variant="ghost"
           size="sm"

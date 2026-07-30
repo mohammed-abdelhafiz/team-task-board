@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { LayoutDashboard, Monitor, Moon, Sun } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { useThemeStore } from "@/store/theme.store";
@@ -19,19 +19,20 @@ export const SidebarNav = () => {
   return (
     <ul className="flex flex-col gap-1.5">
       <li>
-        <Button
-          variant="ghost"
+        <Link
+          to="/dashboard"
+          aria-label="Dashboard"
           className={cn(
-            "w-full justify-start py-2.5 px-3 rounded-xl transition-all",
+            buttonVariants({ variant: "ghost" }),
+            "w-full justify-start py-2.5 px-3 rounded-xl transition-all h-auto",
             isDashboardActive
               ? "bg-primary/10 text-primary font-semibold hover:bg-primary/15"
               : "text-muted-foreground hover:text-foreground"
           )}
-          render={<Link to="/dashboard" aria-label="Dashboard" />}
         >
           <LayoutDashboard className="size-4 mr-2" />
           <span>Dashboard</span>
-        </Button>
+        </Link>
       </li>
       <li>
         <DropdownMenu>

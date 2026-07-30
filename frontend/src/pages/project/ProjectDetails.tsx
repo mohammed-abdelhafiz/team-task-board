@@ -273,9 +273,9 @@ export default function ProjectDetails() {
   };
 
   return (
-    <main className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8 space-y-6">
+    <main className="mx-auto max-w-7xl space-y-6">
       {/* Navigation Breadcrumb */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
         <Link
           to="/dashboard"
           className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
@@ -284,7 +284,7 @@ export default function ProjectDetails() {
           <span>Back to Projects</span>
         </Link>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <Button
             variant="ghost"
             size="icon-sm"
@@ -322,14 +322,14 @@ export default function ProjectDetails() {
       </div>
 
       {/* Project Banner Header Card */}
-      <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm transition-all">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="space-y-1.5">
+      <div className="rounded-2xl border border-border/60 bg-card p-5 sm:p-6 shadow-sm transition-all">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-1.5 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-2xl font-bold tracking-tight text-foreground">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground truncate">
                 {details.title}
               </h1>
-              <Badge variant="secondary" className="text-xs font-medium">
+              <Badge variant="secondary" className="text-xs font-medium shrink-0">
                 {canManage ? "Manager" : "Member"}
               </Badge>
             </div>
@@ -339,7 +339,7 @@ export default function ProjectDetails() {
           </div>
 
           {/* Members & Progress Stack */}
-          <div className="flex items-center gap-6 border-t border-border/40 pt-4 md:border-t-0 md:pt-0">
+          <div className="flex items-center gap-6 border-t border-border/40 pt-4 sm:border-t-0 sm:pt-0 shrink-0">
             {/* Team Avatars */}
             <div className="space-y-1">
               <span className="text-[11px] font-medium text-muted-foreground block">
@@ -367,7 +367,7 @@ export default function ProjectDetails() {
             </div>
 
             {/* Completion Progress */}
-            <div className="w-36 space-y-1.5">
+            <div className="w-32 sm:w-36 space-y-1.5">
               <div className="flex justify-between text-[11px] font-semibold">
                 <span className="text-muted-foreground">Progress</span>
                 <span className="text-foreground">{completionPercentage}%</span>
@@ -409,8 +409,7 @@ export default function ProjectDetails() {
           <p className="text-xs text-destructive">Unable to load tasks.</p>
         </div>
       ) : viewMode === "board" ? (
-        /* Kanban Board View */
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full min-w-0">
           {columnDefinitions.map((column) => {
             const columnTasks = filteredTasks.filter(
               (t) => t.status === column.value
@@ -433,7 +432,7 @@ export default function ProjectDetails() {
         /* Table / List View */
         <div className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-xs">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
+            <table className="w-full text-left text-xs min-w-[650px]">
               <thead className="border-b border-border/60 bg-muted/40 font-semibold text-muted-foreground">
                 <tr>
                   <th className="p-3.5">Task Title</th>

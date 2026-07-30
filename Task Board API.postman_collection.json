@@ -1,0 +1,433 @@
+{
+  "info": {
+    "_postman_id": "ce442a68-e21c-4925-b79b-0127cb20858d",
+    "name": "Task Board API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "42138655"
+  },
+  "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"fullName\": \"Mohamed Abdelhafiz\",\r\n  \"email\": \"mohamed5@test.com\",\r\n  \"password\": \"123456\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"mohamed5@test.com\",\r\n  \"password\": \"123456\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get me",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"mohamed2@test.com\",\r\n  \"password\": \"123456\"\r\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"mohamed2@test.com\",\r\n  \"password\": \"123456\"\r\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "projects",
+      "item": [
+        {
+          "name": "create project",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Task Board\",\r\n  \"description\": \"Backend Task\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/projects",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projects"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get projects",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Task Board\",\r\n  \"description\": \"Backend Task\"\r\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/projects",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projects"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get project",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Task Board\",\r\n  \"description\": \"Backend Task\"\r\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/projects/689999999999999999999999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projects",
+                "689999999999999999999999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete project",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/projects/6a68c26a320aa880255cc80d",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projects",
+                "6a68c26a320aa880255cc80d"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update project",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Task Board Updated\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/projects/6a68c26a320aa880255cc80d",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projects",
+                "6a68c26a320aa880255cc80d"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "add member",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"userId\":\"6a68b533284844827b448f03\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/projects/6a68d49653aacb342db8d6dd/members",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projects",
+                "6a68d49653aacb342db8d6dd",
+                "members"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete member",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"userId\":\"6a68b533284844827b448f03\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/projects/6a68d49653aacb342db8d6dd/members/6a68b533284844827b448f03",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projects",
+                "6a68d49653aacb342db8d6dd",
+                "members",
+                "6a68b533284844827b448f03"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "tasks",
+      "item": [
+        {
+          "name": "create task",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\":\"task 1 \",\r\n    \"priority\":\"high\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/projects/6a68ceae88c5392e9016b173/tasks",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projects",
+                "6a68ceae88c5392e9016b173",
+                "tasks"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get tasks",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\":\"task 1 \"\r\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/projects/6a68ceae88c5392e9016b173/tasks",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projects",
+                "6a68ceae88c5392e9016b173",
+                "tasks"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get task",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\":\"task 1 \"\r\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/projects/6a68ceae88c5392e9016b173/tasks/6a68ceb688c5392e9016b174",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projects",
+                "6a68ceae88c5392e9016b173",
+                "tasks",
+                "6a68ceb688c5392e9016b174"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update task",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\":\"task 10\",\r\n    \"priority\":\"low\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/projects/6a68ceae88c5392e9016b173/tasks/6a68ceb688c5392e9016b174",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projects",
+                "6a68ceae88c5392e9016b173",
+                "tasks",
+                "6a68ceb688c5392e9016b174"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete task",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/projects/6a68ceae88c5392e9016b173/tasks/6a68ceb688c5392e9016b174",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projects",
+                "6a68ceae88c5392e9016b173",
+                "tasks",
+                "6a68ceb688c5392e9016b174"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

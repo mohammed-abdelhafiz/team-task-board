@@ -5,7 +5,7 @@ export type Project = {
   title: string;
   description: string;
   owner: User;
-  members: string[];
+  members: Array<User | string>;
   createdAt: string;
   updatedAt: string;
 };

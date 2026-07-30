@@ -2,13 +2,14 @@ import { defineConfig } from "vite";
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import babel from "@rolldown/plugin-babel";
-import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
+  resolve: {
+    tsconfigPaths: true,
+  },
   plugins: [
     react(),
     tailwindcss(),
-    tsconfigPaths(),
     babel({
       presets: [reactCompilerPreset()],
     }),
@@ -16,7 +17,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:5000",
+        target: process.env.VITE_API_PROXY || "http://localhost:5000",
       },
     },
   },

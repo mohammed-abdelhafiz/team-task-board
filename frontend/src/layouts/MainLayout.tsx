@@ -5,7 +5,7 @@ export default function MainLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <Sidebar />
-      <div className="p-6 md:pl-64">{children}</div>
+      <div className="p-6 md:pl-72 md:pr-8">{children}</div>
     </>
   );
 }

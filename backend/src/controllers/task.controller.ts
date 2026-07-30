@@ -78,3 +78,8 @@ export async function deleteTask(req: Request, res: Response) {
     message: "Task deleted successfully",
   });
 }
+
+export async function getTaskAudit(req: Request, res: Response) {
+  const history = await taskService.getTaskAudit(req.params.projectId as string, req.params.taskId as string, req.user._id);
+  res.json({ success: true, history });
+}

@@ -9,6 +9,8 @@ import {
 import { AppError } from "@/utils/app-error";
 import { authorizeProjectManagement } from "@/utils/project-permission";
 import User, { IUser } from "@/models/user.model";
+import Task from "@/models/task.model";
+import TaskAudit from "@/models/task-audit.model";
 
 export async function createProject(
   userId: Types.ObjectId,
@@ -54,6 +56,9 @@ export async function getProjectById(
   projectId: string,
   userId: Types.ObjectId,
 ) {
+  if (!Types.ObjectId.isValid(projectId)) {
+    throw new AppError("Invalid project id", 400);
+  }
   const project = await Project.findOne({
     _id: projectId,
     members: userId,
@@ -73,6 +78,9 @@ export async function updateProject(
   user: IUser,
   data: UpdateProjectDto,
 ) {
+  if (!Types.ObjectId.isValid(projectId)) {
+    throw new AppError("Invalid project id", 400);
+  }
   const project = await Project.findById(projectId);
 
   if (!project) {
@@ -89,6 +97,9 @@ export async function updateProject(
 }
 
 export async function deleteProject(projectId: string, user: IUser) {
+  if (!Types.ObjectId.isValid(projectId)) {
+    throw new AppError("Invalid project id", 400);
+  }
   const project = await Project.findById(projectId);
 
   if (!project) {
@@ -97,7 +108,11 @@ export async function deleteProject(projectId: string, user: IUser) {
 
   authorizeProjectManagement(project, user);
 
-  await project.deleteOne();
+  await Promise.all([
+    project.deleteOne(),
+    Task.deleteMany({ project: project._id }),
+    TaskAudit.deleteMany({ project: project._id }),
+  ]);
 }
 
 export async function addMember(
@@ -105,6 +120,9 @@ export async function addMember(
   currentUserId: Types.ObjectId,
   data: AddMemberDto,
 ) {
+  if (!Types.ObjectId.isValid(projectId)) {
+    throw new AppError("Invalid project id", 400);
+  }
   const project = await Project.findById(projectId);
 
   if (!project) {
@@ -119,7 +137,9 @@ export async function addMember(
 
   authorizeProjectManagement(project, currentUser);
 
-  const user = await User.findById(data.userId);
+  const user = data.userId
+    ? await User.findById(data.userId)
+    : await User.findOne({ email: data.email?.toLowerCase() });
 
   if (!user) {
     throw new AppError("User not found", 404);
@@ -137,7 +157,7 @@ export async function addMember(
 
   await project.save();
 
-  await project.populate("members", "name email");
+  await project.populate("members", "fullName email");
 
   return project;
 }
@@ -147,6 +167,9 @@ export async function removeMember(
   currentUserId: Types.ObjectId,
   memberId: string,
 ) {
+  if (!Types.ObjectId.isValid(projectId)) {
+    throw new AppError("Invalid project id", 400);
+  }
   const project = await Project.findById(projectId);
 
   if (!project) {
@@ -183,9 +206,15 @@ export async function removeMember(
     (member) => !member.equals(memberObjectId),
   );
 
-  await project.save();
+  await Promise.all([
+    project.save(),
+    Task.updateMany(
+      { project: project._id, assignedTo: memberObjectId },
+      { $unset: { assignedTo: 1 } },
+    ),
+  ]);
 
-  await project.populate("members", "name email");
+  await project.populate("members", "fullName email");
 
   return project;
 }

@@ -10,6 +10,7 @@ const router = Router({
 router.post("/", protect, taskController.createTask);
 router.get("/", protect, taskController.getTasks);
 router.get("/:taskId", protect, taskController.getTaskById);
+router.get("/:taskId/history", protect, taskController.getTaskAudit);
 router.patch("/:taskId", protect, taskController.updateTask);
 router.delete("/:taskId", protect, taskController.deleteTask);
 
